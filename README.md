@@ -12,7 +12,7 @@ A Python-based 3D CAD modeling library using CadQuery for creating reactor compo
 ### 1. Clone or Download the Repository
 
 ```bash
-git clone https://github.com/pilarsg3/ZeroLevelProduct_v2
+git clone https://github.com/pilarsg3/ZeroLevelLibrary_v2
 cd ZeroLevelProduct_V2
 ```
 

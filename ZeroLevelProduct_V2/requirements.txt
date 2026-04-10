@@ -1,5 +1,0 @@
-cadquery==2.7.0
-matplotlib==3.10.8
-numpy==2.4.3
-ocp_vscode==3.1.2
-Shapely==2.1.2
