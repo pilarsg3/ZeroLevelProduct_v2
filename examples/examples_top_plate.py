@@ -1,5 +1,6 @@
 import cadquery as cq
 from ocp_vscode import show
+import time
 
 from top_plate import create_top_plate
 
@@ -60,8 +61,13 @@ plate_6 = create_top_plate(
 
 # ── Uncomment whichever plate you want to inspect ─────────────────────────────
 show(plate_1)
-# show(plate_2)
-# show(plate_3)
-# show(plate_4)
-# show(plate_5)
-# show(plate_6)
+time.sleep(1)
+show(plate_2)       
+time.sleep(1)
+show(plate_3)
+time.sleep(1)
+show(plate_4)
+time.sleep(1)
+show(plate_5)
+time.sleep(1)
+show(plate_6)

@@ -67,8 +67,9 @@ def revolve_profile(
     axis: AxisName = "Z",
     axis_point: Tuple[float, float, float] = (0, 0, 0),
 ) -> cq.Workplane:
-    plane_name = getattr(profile, '_plane_name', 'XY')
-    plane = cq.Workplane(plane_name).plane
+    # plane_name = getattr(profile, '_plane_name', 'XY')
+    # plane = cq.Workplane(plane_name).plane
+    plane = profile.plane
 
     local_point = cast(cq.Vector, plane.toLocalCoords(cq.Vector(*axis_point)))
 
@@ -81,8 +82,25 @@ def revolve_profile(
     local_dir = cast(cq.Vector, plane.toLocalCoords(plane.origin + _DIRS[axis]) - plane.toLocalCoords(plane.origin))  # type: ignore[operator]
     # .x and .y here are local plane axes, not global X/Y
     # toLocalCoords handles the mapping for any plane (XY, XZ, YZ)
-    p0 = (local_point.x, local_point.y)
-    p1 = (local_point.x + local_dir.x, local_point.y + local_dir.y)
+    
+    # p0 = (local_point.x, local_point.y)
+    # p1 = (local_point.x + local_dir.x, local_point.y + local_dir.y)
+
+    # Use whichever two local coordinates carry the axis direction
+    if abs(local_dir.z) > abs(local_dir.x) and abs(local_dir.z) > abs(local_dir.y):
+        # axis direction is mostly in local Z — use x and z instead
+        p0 = (local_point.x, local_point.z)
+        p1 = (local_point.x + local_dir.x, local_point.z + local_dir.z)
+    else:
+        p0 = (local_point.x, local_point.y)
+        p1 = (local_point.x + local_dir.x, local_point.y + local_dir.y)
+
+
+
+    print(f"DEBUG: axis={axis}")
+    print(f"  local_dir={local_dir.toTuple()}")
+    print(f"  p0={p0}, p1={p1}")
+
 
     return profile.revolve(angle, p0, p1)
 

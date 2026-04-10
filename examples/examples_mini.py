@@ -1,5 +1,6 @@
 # examples.py
 import math
+import time
 import cadquery as cq
 from ocp_vscode import show
 
@@ -41,12 +42,22 @@ circle_xz       = extrude_profile(build_2D_sketch(ex_circle, sketch_plane="XZ"),
 # ── Full 360° revolves around Z ───────────────────────────────────────────────
 
 # Rectangle off-axis → hollow cylinder (tube)
+#rect_tube = revolve_profile(
+#    build_2D_sketch({"obj_type": "rectangle", "width": 10, "height": 20}, sketch_plane="XZ"),
+#    angle=30.0,
+#    axis="Z",
+#    axis_point=(0, 0, 0),      # x-offset >= width/2=5 to clear the axis
+#)
+
 rect_tube = revolve_profile(
     build_2D_sketch({"obj_type": "rectangle", "width": 10, "height": 20}, sketch_plane="XZ"),
     angle=30.0,
     axis="Z",
-    axis_point=(0, 0, 0),      # x-offset >= width/2=5 to clear the axis
+    axis_point=(10, 0, 0),   # ← offset by at least width/2 = 5, use 10 to be safe
 )
+
+
+
 # wp = build_2D_sketch({"obj_type": "rectangle", "width": 10, "height": 20}, sketch_plane="XZ")
 # val = wp.val()
 # print(type(val))
@@ -132,16 +143,24 @@ plenum = revolve_profile(
 
 # ── Visualise (uncomment one at a time) ──────────────────────────────────────
 
-#show(rect_tube)
-# show(torus)
-# show(elliptic_torus)
-# show(hex_torus)
-# show(elbow_90)
-# show(dome)
-# show(torus_x)
-# show(flange)
-# show(plenum)
-
+show(rect_tube)
+time.sleep(1)
+show(torus)
+time.sleep(1)
+show(elliptic_torus)
+time.sleep(1)
+show(hex_torus)
+time.sleep(1)
+show(elbow_90)
+time.sleep(1)
+show(dome)
+time.sleep(1)
+show(torus_x)
+time.sleep(1)
+show(flange)
+time.sleep(1)
+show(plenum)
+time.sleep(1)
 
 
 

@@ -243,95 +243,95 @@ solid10, _ = build_solid("sweep", {"obj_type": "regular_polygon", "radius": 2, "
 # -----------------------------------------------------------------------------------------------
 
 
-# PIPE_1_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 3, "inner_radius": 2}
-# PIPE_6_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 1, "inner_radius": 0.7}
-# PIPE_7_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 1, "inner_radius": 0.7}
-# PIPE_9_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 0.8, "inner_radius": 0.6}
-# PIPE_10_DEF  = {"obj_type": "pipe", "height": 30, "outer_radius": 2, "inner_radius": 1.5}
-# VESSEL_9_DEF = {"obj_type": "cylinder_closed_bottom", "height": 10, "outer_radius": 5, "wall_thickness": 0.5, "bottom_thickness": 1.0}
+PIPE_1_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 3, "inner_radius": 2}
+PIPE_6_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 1, "inner_radius": 0.7}
+PIPE_7_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 1, "inner_radius": 0.7}
+PIPE_9_DEF   = {"obj_type": "pipe", "height": 20, "outer_radius": 0.8, "inner_radius": 0.6}
+PIPE_10_DEF  = {"obj_type": "pipe", "height": 30, "outer_radius": 2, "inner_radius": 1.5}
+VESSEL_9_DEF = {"obj_type": "cylinder_closed_bottom", "height": 10, "outer_radius": 5, "wall_thickness": 0.5, "bottom_thickness": 1.0}
 
-# CYL_2_DEF   = {"obj_type": "cylinder", "height": 20, "radius": 2}
-# SPH_3_DEF   = {"obj_type": "sphere", "radius": 9}
-# INNER_4_DEF = {"obj_type": "box", "length": 4, "width": 4, "height": 4}
-# CYL_5_DEF   = {"obj_type": "cylinder", "height": 8, "radius": 1}
-# SPH_8_DEF   = {"obj_type": "sphere", "radius": 2}
-# SPH_10_DEF  = {"obj_type": "sphere", "radius": 5}
-# CYL_10_DEF  = {"obj_type": "cylinder", "height": 30, "radius": 1}
+CYL_2_DEF   = {"obj_type": "cylinder", "height": 20, "radius": 2}
+SPH_3_DEF   = {"obj_type": "sphere", "radius": 9}
+INNER_4_DEF = {"obj_type": "box", "length": 4, "width": 4, "height": 4}
+CYL_5_DEF   = {"obj_type": "cylinder", "height": 8, "radius": 1}
+SPH_8_DEF   = {"obj_type": "sphere", "radius": 2}
+SPH_10_DEF  = {"obj_type": "sphere", "radius": 5}
+CYL_10_DEF  = {"obj_type": "cylinder", "height": 30, "radius": 1}
 
-# # ── 1. Pipe through a box wall ──────────────────────────────────────────────
-# pipe1, _ = build_solid("primitive", PIPE_1_DEF)
-# wall1, _ = build_solid("primitive", {"obj_type": "box", "length": 10, "width": 10, "height": 2})
-# print(f"Combining: box  <--  {PIPE_1_DEF['obj_type']}")
-# show(insert_into(wall1, pipe1))
-# time.sleep(3)
+# ── 1. Pipe through a box wall ──────────────────────────────────────────────
+pipe1, _ = build_solid("primitive", PIPE_1_DEF)
+wall1, _ = build_solid("primitive", {"obj_type": "box", "length": 10, "width": 10, "height": 2})
+print(f"Combining: box  <--  {PIPE_1_DEF['obj_type']}")
+show(insert_into(wall1, pipe1))
+time.sleep(3)
 
-# # ── 2. Cylinder through a box ───────────────────────────────────────────────
-# cyl2, _  = build_solid("primitive", CYL_2_DEF)
-# wall2, _ = build_solid("primitive", {"obj_type": "box", "length": 10, "width": 10, "height": 2})
-# print(f"Combining: box  <--  {CYL_2_DEF['obj_type']}")
-# show(insert_into(wall2, cyl2))
-# time.sleep(3)
+# ── 2. Cylinder through a box ───────────────────────────────────────────────
+cyl2, _  = build_solid("primitive", CYL_2_DEF)
+wall2, _ = build_solid("primitive", {"obj_type": "box", "length": 10, "width": 10, "height": 2})
+print(f"Combining: box  <--  {CYL_2_DEF['obj_type']}")
+show(insert_into(wall2, cyl2))
+time.sleep(3)
 
-# # ── 3. Sphere embedded in a box ─────────────────────────────────────────────
-# sph3, _  = build_solid("primitive", SPH_3_DEF)
-# wall3, _ = build_solid("primitive", {"obj_type": "box", "length": 12, "width": 12, "height": 12})
-# print(f"Combining: box  <--  {SPH_3_DEF['obj_type']}")
-# show(insert_into(wall3, sph3))
-# time.sleep(3)
+# ── 3. Sphere embedded in a box ─────────────────────────────────────────────
+sph3, _  = build_solid("primitive", SPH_3_DEF)
+wall3, _ = build_solid("primitive", {"obj_type": "box", "length": 12, "width": 12, "height": 12})
+print(f"Combining: box  <--  {SPH_3_DEF['obj_type']}")
+show(insert_into(wall3, sph3))
+time.sleep(3)
 
-# # ── 4. Box cut into a larger box ────────────────────────────────────────────
-# inner4, _ = build_solid("primitive", INNER_4_DEF)
-# outer4, _ = build_solid("primitive", {"obj_type": "box", "length": 10, "width": 10, "height": 10})
-# print(f"Combining: box  <--  {INNER_4_DEF['obj_type']}")
-# show(insert_into(outer4, inner4))
-# time.sleep(3)
+# ── 4. Box cut into a larger box ────────────────────────────────────────────
+inner4, _ = build_solid("primitive", INNER_4_DEF)
+outer4, _ = build_solid("primitive", {"obj_type": "box", "length": 10, "width": 10, "height": 10})
+print(f"Combining: box  <--  {INNER_4_DEF['obj_type']}")
+show(insert_into(outer4, inner4))
+time.sleep(3)
 
-# # ── 5. Cylinder embedded in a sphere ────────────────────────────────────────
-# cyl5, _ = build_solid("primitive", CYL_5_DEF)
-# sph5, _ = build_solid("primitive", {"obj_type": "sphere", "radius": 5})
-# print(f"Combining: sphere  <--  {CYL_5_DEF['obj_type']}")
-# show(insert_into(sph5, cyl5))
-# time.sleep(3)
+# ── 5. Cylinder embedded in a sphere ────────────────────────────────────────
+cyl5, _ = build_solid("primitive", CYL_5_DEF)
+sph5, _ = build_solid("primitive", {"obj_type": "sphere", "radius": 5})
+print(f"Combining: sphere  <--  {CYL_5_DEF['obj_type']}")
+show(insert_into(sph5, cyl5))
+time.sleep(3)
 
-# # ── 6. Pipe through a cylinder ──────────────────────────────────────────────
-# pipe6, _ = build_solid("primitive", PIPE_6_DEF)
-# cyl6, _  = build_solid("primitive", {"obj_type": "cylinder", "height": 4, "radius": 6})
-# print(f"Combining: cylinder  <--  {PIPE_6_DEF['obj_type']}")
-# show(insert_into(cyl6, pipe6))
-# time.sleep(3)
+# ── 6. Pipe through a cylinder ──────────────────────────────────────────────
+pipe6, _ = build_solid("primitive", PIPE_6_DEF)
+cyl6, _  = build_solid("primitive", {"obj_type": "cylinder", "height": 4, "radius": 6})
+print(f"Combining: cylinder  <--  {PIPE_6_DEF['obj_type']}")
+show(insert_into(cyl6, pipe6))
+time.sleep(3)
 
-# # ── 7. Pipe through a wedge ─────────────────────────────────────────────────
-# pipe7, _  = build_solid("primitive", PIPE_7_DEF)
-# wedge7, _ = build_solid("primitive", {"obj_type": "wedge", "dx": 10, "dy": 8, "dz": 10,
-#                                        "xmin": 2, "zmin": 2, "xmax": 8, "zmax": 8})
-# print(f"Combining: wedge  <--  {PIPE_7_DEF['obj_type']}")
-# show(insert_into(wedge7, pipe7))
-# time.sleep(3)
+# ── 7. Pipe through a wedge ─────────────────────────────────────────────────
+pipe7, _  = build_solid("primitive", PIPE_7_DEF)
+wedge7, _ = build_solid("primitive", {"obj_type": "wedge", "dx": 10, "dy": 8, "dz": 10,
+                                       "xmin": 2, "zmin": 2, "xmax": 8, "zmax": 8})
+print(f"Combining: wedge  <--  {PIPE_7_DEF['obj_type']}")
+show(insert_into(wedge7, pipe7))
+time.sleep(3)
 
-# # ── 8. Sphere into a cylinder ───────────────────────────────────────────────
-# sph8, _ = build_solid("primitive", SPH_8_DEF)
-# cyl8, _ = build_solid("primitive", {"obj_type": "cylinder", "height": 10, "radius": 5})
-# print(f"Combining: cylinder  <--  {SPH_8_DEF['obj_type']}")
-# show(insert_into(cyl8, sph8))
-# time.sleep(3)
+# ── 8. Sphere into a cylinder ───────────────────────────────────────────────
+sph8, _ = build_solid("primitive", SPH_8_DEF)
+cyl8, _ = build_solid("primitive", {"obj_type": "cylinder", "height": 10, "radius": 5})
+print(f"Combining: cylinder  <--  {SPH_8_DEF['obj_type']}")
+show(insert_into(cyl8, sph8))
+time.sleep(3)
 
-# # ── 9. Pipe through a cylinder_closed_bottom (rotated) ──────────────────────
-# vessel9, _ = build_solid("primitive", VESSEL_9_DEF)
-# pipe9, _   = build_solid("primitive", PIPE_9_DEF, rotation_angles=(0, 90, 0), center_coords=(0, 0, 3))
-# print(f"Combining: cylinder_closed_bottom  <--  {PIPE_9_DEF['obj_type']}")
-# show(insert_into(vessel9, pipe9))
-# time.sleep(3)
+# ── 9. Pipe through a cylinder_closed_bottom (rotated) ──────────────────────
+vessel9, _ = build_solid("primitive", VESSEL_9_DEF)
+pipe9, _   = build_solid("primitive", PIPE_9_DEF, rotation_angles=(0, 90, 0), center_coords=(0, 0, 3))
+print(f"Combining: cylinder_closed_bottom  <--  {PIPE_9_DEF['obj_type']}")
+show(insert_into(vessel9, pipe9))
+time.sleep(3)
 
-# # ── 10. Box with sphere + pipe + cylinder all combined ───────────────────────
-# block10, _ = build_solid("primitive", {"obj_type": "box", "length": 20, "width": 20, "height": 20})
-# sph10, _   = build_solid("primitive", SPH_10_DEF)
-# pipe10, _  = build_solid("primitive", PIPE_10_DEF)
-# cyl10, _   = build_solid("primitive", CYL_10_DEF, center_coords=(5, 5, 0))
-# print(f"Combining: box  <--  {PIPE_10_DEF['obj_type']}")
-# result10 = insert_into(block10, pipe10)
-# print(f"Combining: result  <--  {SPH_10_DEF['obj_type']}")
-# result10 = insert_into(result10, sph10)
-# print(f"Combining: result  <--  {CYL_10_DEF['obj_type']}")
-# result10 = insert_into(result10, cyl10)
-# show(result10)
-# time.sleep(3)
+# ── 10. Box with sphere + pipe + cylinder all combined ───────────────────────
+block10, _ = build_solid("primitive", {"obj_type": "box", "length": 20, "width": 20, "height": 20})
+sph10, _   = build_solid("primitive", SPH_10_DEF)
+pipe10, _  = build_solid("primitive", PIPE_10_DEF)
+cyl10, _   = build_solid("primitive", CYL_10_DEF, center_coords=(5, 5, 0))
+print(f"Combining: box  <--  {PIPE_10_DEF['obj_type']}")
+result10 = insert_into(block10, pipe10)
+print(f"Combining: result  <--  {SPH_10_DEF['obj_type']}")
+result10 = insert_into(result10, sph10)
+print(f"Combining: result  <--  {CYL_10_DEF['obj_type']}")
+result10 = insert_into(result10, cyl10)
+show(result10)
+time.sleep(3)

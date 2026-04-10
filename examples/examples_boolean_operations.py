@@ -91,7 +91,7 @@ for i, child in enumerate(assembly.children):
     if hasattr(child, 'children') and child.children:
         for j, subchild in enumerate(child.children):
             print(f"      [{j}] {subchild.name}: {type(subchild.obj).__name__}")
-#show(assembly)
+show(assembly)
 
 # ================================================================================================
 # APPLY BOOLEAN OPERATIONS
@@ -105,8 +105,8 @@ assembly_union = assemble_objects([BOX1, CYLINDER])
 assembly_union = apply_boolean_operations(assembly_union, [
     {"operation": "union", "obj1": "box1", "obj2": "cylinder"}
 ])
-#show(assembly_union)
-#time.sleep(1)
+show(assembly_union)
+time.sleep(1)
 
 # 2. CUT - Remove cylinder from box1 (carve it out)
 print("\n=== OPERATION 2: CUT ===")
@@ -114,8 +114,8 @@ assembly_cut = assemble_objects([BOX1, CYLINDER])
 assembly_cut = apply_boolean_operations(assembly_cut, [
     {"operation": "cut", "obj1": "box1", "obj2": "cylinder"}
 ])
-#show(assembly_cut)
-#time.sleep(1)
+show(assembly_cut)
+time.sleep(1)
 
 # 3. INTERSECT - Keep only the overlapping volume
 print("\n=== OPERATION 3: INTERSECT ===")
@@ -123,8 +123,8 @@ assembly_intersect = assemble_objects([BOX1, CYLINDER])
 assembly_intersect = apply_boolean_operations(assembly_intersect, [
     {"operation": "intersect", "obj1": "box1", "obj2": "cylinder"}
 ])
-#show(assembly_intersect)
-#time.sleep(1)
+show(assembly_intersect)
+time.sleep(1)
 
 
 # Show box + cylinder
@@ -181,8 +181,8 @@ final_assembly = assemble_objects([BOX, PIPE_OUTER])  # Use pipe_outer from the 
 final_assembly = apply_boolean_operations(final_assembly, [
     {"operation": "cut", "obj1": "wall", "obj2": "pipe_outer", "keep_obj2": True}
 ])
-#show(final_assembly)
-
+show(final_assembly)
+time.sleep(1)
 
 # 1. Box (the wall)
 BOX = {
@@ -207,7 +207,8 @@ wall_with_hole = wall_solid.cut(hollow_pipe)
 assembly = cq.Assembly()
 assembly.add(wall_with_hole, name="wall_with_hole")
 assembly.add(hollow_pipe, name="hollow_pipe")
-#show(assembly)
+show(assembly)
+time.sleep(1)
 
 
 import cadquery as cq

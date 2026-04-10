@@ -33,10 +33,17 @@ PATH_L = cq.Wire.assembleEdges([
 ])
 
 # U-shaped path: up 20, arc across, down 20
+# PATH_U = cq.Wire.assembleEdges([
+#     cq.Edge.makeLine(cq.Vector(0,  0, 0),  cq.Vector(0,  0, 20)),
+#     cq.Edge.makeThreePointArc(
+#         cq.Vector(0, 0, 20), cq.Vector(10, 0, 25), cq.Vector(20, 0, 20)
+#     ),
+#     cq.Edge.makeLine(cq.Vector(20, 0, 20), cq.Vector(20, 0, 0)),
+# ])
 PATH_U = cq.Wire.assembleEdges([
     cq.Edge.makeLine(cq.Vector(0,  0, 0),  cq.Vector(0,  0, 20)),
     cq.Edge.makeThreePointArc(
-        cq.Vector(0, 0, 20), cq.Vector(10, 0, 25), cq.Vector(20, 0, 20)
+        cq.Vector(0, 0, 20), cq.Vector(10, 0, 30), cq.Vector(20, 0, 20)  # 30 instead of 25
     ),
     cq.Edge.makeLine(cq.Vector(20, 0, 20), cq.Vector(20, 0, 0)),
 ])

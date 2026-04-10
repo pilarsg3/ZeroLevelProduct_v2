@@ -195,8 +195,8 @@ CYLINDER_CLOSED_BOTTOM_TORI = {
 # ================================================================================================
 
 # Uncomment one of the following to test:
-#set_components(EXAMPLE_1)
-set_components(EXAMPLE_2)
+set_components(EXAMPLE_1)
+#set_components(EXAMPLE_2)
 #set_components(EXAMPLE_3)
 
 
