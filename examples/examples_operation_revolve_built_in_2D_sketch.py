@@ -61,4 +61,4 @@ for label, shape_dict, sketch_plane, angle, axis, axis_point in examples:
     profile = build_2D_sketch(shape_dict, sketch_plane=sketch_plane)
     result  = revolve_profile(profile, angle=angle, axis=axis, axis_point=axis_point)
     show(result)
-    time.sleep(7)
+    time.sleep(1)

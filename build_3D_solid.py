@@ -344,9 +344,10 @@ def build_solid(
             obj_type = profile.get("obj_type", "")
             if obj_type in PREMADE_BUILDERS:
                 solid = build_premade_component(profile)
+                outer_solid = solid                                            # ← premade manages its own outer
             else:
                 solid = build_3D_primitive(profile)
-            outer_solid = build_3D_primitive(get_outer_profile(profile))  # ← type-agnostic
+                outer_solid = build_3D_primitive(get_outer_profile(profile))  # ← only for known primitives
         elif isinstance(profile, list):
             solid = set_components(profile)  # type: ignore
             return solid, obj_id             # type: ignore

@@ -155,29 +155,29 @@ examples = [
     ("triangle + arc",            p_triangle(), path_arc()),
 
     # --- analytical helix ---
-    ("rect     + anal. helix",    p_rect(),     path_analytical_helix()),
-    ("circle   + anal. helix",    p_circle(),   path_analytical_helix()),
-    ("ellipse  + anal. helix",    p_ellipse(),  path_analytical_helix()),
-    ("slot     + anal. helix",    p_slot(),     path_analytical_helix()),
-    ("hexagon  + anal. helix",    p_hex(),      path_analytical_helix()),
-    ("polygon  + anal. helix",    p_polygon(),  path_analytical_helix()),
+    ("rect     + analytical helix",    p_rect(),     path_analytical_helix()),
+    ("circle   + analytical helix",    p_circle(),   path_analytical_helix()),
+    ("ellipse  + analytical helix",    p_ellipse(),  path_analytical_helix()),
+    ("slot     + analytical helix",    p_slot(),     path_analytical_helix()),
+    ("hexagon  + analytical helix",    p_hex(),      path_analytical_helix()),
+    ("polygon  + analytical helix",    p_polygon(),  path_analytical_helix()),
 
     # --- analytical spiral ---
-    ("rect     + anal. spiral",   p_rect(),     path_analytical_spiral()),
-    ("circle   + anal. spiral",   p_circle(),   path_analytical_spiral()),
-    ("ellipse  + anal. spiral",   p_ellipse(),  path_analytical_spiral()),
-    ("trapezoid + anal. spiral",  p_trapezoid(),path_analytical_spiral()),
+    ("rect     + analytical spiral",   p_rect(),     path_analytical_spiral()),
+    ("circle   + analytical spiral",   p_circle(),   path_analytical_spiral()),
+    ("ellipse  + analytical spiral",   p_ellipse(),  path_analytical_spiral()),
+    ("trapezoid + analytical spiral",  p_trapezoid(),path_analytical_spiral()),
 
     # --- analytical wave ---
-    ("rect     + anal. wave",     p_rect(),     path_analytical_wave()),
-    ("circle   + anal. wave",     p_circle(),   path_analytical_wave()),
-    ("hexagon  + anal. wave",     p_hex(),      path_analytical_wave()),
+    ("rect     + analytical wave",     p_rect(),     path_analytical_wave()),
+    ("circle   + analytical wave",     p_circle(),   path_analytical_wave()),
+    ("hexagon  + analytical wave",     p_hex(),      path_analytical_wave()),
 
     # --- analytical S-curve ---
-    ("rect     + anal. S-curve",  p_rect(),     path_analytical_s_curve()),
-    ("circle   + anal. S-curve",  p_circle(),   path_analytical_s_curve()),
-    ("ellipse  + anal. S-curve",  p_ellipse(),  path_analytical_s_curve()),
-    ("slot     + anal. S-curve",  p_slot(),     path_analytical_s_curve()),
+    ("rect     + analytical S-curve",  p_rect(),     path_analytical_s_curve()),
+    ("circle   + analytical S-curve",  p_circle(),   path_analytical_s_curve()),
+    ("ellipse  + analytical S-curve",  p_ellipse(),  path_analytical_s_curve()),
+    ("slot     + analytical S-curve",  p_slot(),     path_analytical_s_curve()),
 
     # --- tuple paths ---
     ("rect     + tuple Z",        p_rect(),     path_tuple_z()),
@@ -194,4 +194,4 @@ for label, profile, path in examples:
         show(result)
     except Exception as e:
         print(f"  FAILED: {e}")
-    time.sleep(2)
+    time.sleep(1)

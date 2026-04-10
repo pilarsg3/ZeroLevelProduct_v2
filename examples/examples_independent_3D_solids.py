@@ -37,7 +37,7 @@ for label, operation, profile, kwargs in examples:
     solid, obj_id = build_solid(operation, profile, **kwargs)
     show(solid)
     print(f"Created: {obj_id}")
-    time.sleep(2)
+    time.sleep(1)
 
 
 # ================================================================================================
@@ -76,8 +76,9 @@ EXAMPLE_3 = [REACTOR_CORE, REACTOR_VESSEL] + [
     for i in range(4)
 ]
 
-#solid1, id1 = build_solid("primitive", REACTOR_CORE)        # single primitive
-#print(f"Created: {id1}")
+solid1, id1 = build_solid("primitive", REACTOR_CORE)        # single primitive
+print(f"Created: {id1}")
+time.sleep(1)
 
-#solid2, id2 = build_solid("primitive", REACTOR_VESSEL)      # single primitive
-#print(f"Created: {id2}")    
+solid2, id2 = build_solid("primitive", REACTOR_VESSEL)      # single primitive
+print(f"Created: {id2}")    
