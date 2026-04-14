@@ -25,7 +25,7 @@ def _color_from_id(obj_id: str) -> cq.Color:
     return cq.Color(r, g, b)
 
 
-def assemble_objects(object_specs: List[Dict[str, Any]]) -> cq.Assembly:
+def assemble_objects(object_specs: List[Dict[str, Any]], export_path: str | None = None) -> cq.Assembly:
     """
     Build a list of objects and assemble them.
     
@@ -34,16 +34,18 @@ def assemble_objects(object_specs: List[Dict[str, Any]]) -> cq.Assembly:
                      Supports two formats for primitives:
                      - With "profile": {"obj_type": "cylinder", ...}
                      - Flattened: "obj_type": "cylinder", ... (directly in spec)
+        export_path: Optional file path to export the assembly as a STEP file.
+                     STEP (.step / .stp) is the standard neutral CAD exchange format,
+                     readable by Fusion 360, SolidWorks, FreeCAD, and all major CAD tools.
+                     If None (default), no file is written.
+                     Example: export_path="output/reactor.step"
     
     Returns:
         cq.Assembly with all built objects
     
     Example:
-        >>> specs = [
-        ...     {"operation": "extrude", "profile": {...}, "height": 20, "obj_id": "beam"},
-        ...     {"operation": "primitive", "obj_type": "cylinder", "radius": 5, ...},
-        ... ]
         >>> assembly = assemble_objects(specs)
+        >>> assembly = assemble_objects(specs, export_path="output/reactor.step")
     """
     from build_3D_solid import build_solid  # Import here to avoid circular dependency if build_solid also imports assemble_objects
     assembly = cq.Assembly()
@@ -54,6 +56,7 @@ def assemble_objects(object_specs: List[Dict[str, Any]]) -> cq.Assembly:
         spec_copy = spec.copy()
         operation = spec_copy.pop("operation")
         spec_copy.pop("insert_into", None)   # strip before passing to build_solid
+        spec_copy.pop("material", None)      # strip — not a build_solid parameter; original spec retains it for compute_bom(), export_openmc_materials(), etc.
 
         if "profile" in spec_copy:
             solid, obj_id = build_solid(operation, **spec_copy)
@@ -96,11 +99,17 @@ def assemble_objects(object_specs: List[Dict[str, Any]]) -> cq.Assembly:
             color = _color_from_id(obj_id)
         assembly.add(solid, name=obj_id, color=color)
 
+    assembly._specs = object_specs   # type: ignore  -> attach specs to the assembly
+
+    if export_path is not None:
+        import os
+        parent = os.path.dirname(export_path)
+        if parent:
+            os.makedirs(parent, exist_ok=True)
+        cq.exporters.export(assembly.toCompound(), export_path)
+        print(f"Assembly exported to: {export_path}")
+
     return assembly
-
-
-
-
 
 
 def apply_boolean_operations(assembly: cq.Assembly, operations: List[Dict[str, Any]]) -> cq.Assembly:
@@ -169,4 +178,6 @@ def apply_boolean_operations(assembly: cq.Assembly, operations: List[Dict[str, A
         color = original.color if original is not None else _color_from_id(obj_id)
         new_assembly.add(obj, name=obj_id, color=color)
     
+    new_assembly._specs = getattr(assembly, "_specs", [])  # type: ignore
+
     return new_assembly
