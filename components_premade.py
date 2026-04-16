@@ -43,11 +43,12 @@ Usage (identical style to all other build_solid primitives)
 """
 
 from __future__ import annotations
-from typing import Any
+from typing import Any, cast
 import cadquery as cq
 
 from reactor_vessel import create_reactor_vessel
 from top_plate      import create_top_plate
+from ihx import create_ihx
 
 
 # ---------------------------------------------------------------------------
@@ -58,7 +59,7 @@ def _build_reactor_vessel(obj: dict[str, Any]) -> cq.Workplane:
     vessel, _ = create_reactor_vessel(
         inner_d            = obj["inner_d"],
         wall_t             = obj["wall_t"],
-        straight_h         = obj["straight_h"],
+        straight_h = cast(float, obj.get("straight_h") or obj.get("height")),    # fallback for NuExtract
         bottom_head_type   = obj.get("bottom_head_type"),
         bottom_head_params = obj.get("bottom_head_params"),
         top_head_type      = obj.get("top_head_type"),
@@ -77,6 +78,28 @@ def _build_reactor_top_plate(obj: dict[str, Any]) -> cq.Workplane:
     )
 
 
+def _build_ihx(obj: dict[str, Any]) -> cq.Workplane:
+    parts = create_ihx(**{
+        k: v for k, v in obj.items()
+        if k in (
+            "shell_od", "shell_wall_t", "shell_straight_h",
+            "inner_od", "inner_wall_t", "inner_h",
+            "bundle_od", "bundle_id", "bundle_h",
+            "secondary_inlet_od", "secondary_inlet_wall_t",
+            "secondary_inlet_length", "secondary_inlet_z",
+            "secondary_outlet_od", "secondary_outlet_wall_t",
+            "secondary_outlet_length", "secondary_outlet_z",
+        )
+    })
+    result = parts["outer_shell"]
+    for name, solid in parts.items():
+        if name != "outer_shell":
+            result = result.union(solid)
+    return result.clean()
+
+
+
+
 # ---------------------------------------------------------------------------
 # Registry — the only thing that needs editing when adding a new component
 # ---------------------------------------------------------------------------
@@ -84,6 +107,7 @@ def _build_reactor_top_plate(obj: dict[str, Any]) -> cq.Workplane:
 PREMADE_BUILDERS: dict[str, Any] = {
     "reactor_vessel":    _build_reactor_vessel,
     "reactor_top_plate": _build_reactor_top_plate,
+    "ihx":               _build_ihx, 
 }
 
 
