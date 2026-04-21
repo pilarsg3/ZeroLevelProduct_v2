@@ -31,12 +31,12 @@ path_wire = (
 
 
 pipe_436 = {"operation"      : "sweep",
-            "profile"        : {"obj_type": "circle", "radius": 460/2},
+            "profile"        : {"obj_type": "circle", "radius": 436/2},
             "path"           : path_wire,   # type: ignore
             "isFrenet"       : True,
             "wall_thickness" : 20,          # set actual wall thickness once known
             "plane"          : "XY",
-            "obj_id"         : "cold_leg_pipe",
+            "obj_id"         : "cold_leg_pipe",      # Check if it's the hot or cold leg
             "insert_into"    : "inner_structure",
             #"center_coords" : (0,0,0),
             }
@@ -67,8 +67,18 @@ shell = {"obj_id": "outer_shell",
          }
 
 
+pipe_630 = {"obj_id": "hot_leg_pipe",   # Check if it's the hot or cold leg
+            "operation": "primitive",
+            "obj_type": "pipe",
+            "outer_radius": 630/2,
+            "height": 3000,
+            "wall_thickness":20,
+            "rotation_angles": (0,90,0),
+            "center_coords": (1750, 0, 7500),}
+#            "insert_into": ["inner_structure", "outer_shell"],}
 
-assembly = assemble_objects([inner, pipe_436, shell])
+
+assembly = assemble_objects([inner, pipe_436, shell, pipe_630])
 show(assembly)
 
 

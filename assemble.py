@@ -83,11 +83,58 @@ def assemble_objects(object_specs: List[Dict[str, Any]], export_path: str | None
         insert_id = spec.get("obj_id")
         if insert_id is None:
             raise ValueError("insert_into: spec is missing 'obj_id'")
-        if target_id not in objects:
-            raise ValueError(f"insert_into: target '{target_id}' not found in assembly")
-        objects[target_id] = insert_into(objects[target_id], objects[insert_id])
+        # normalise to list so both str and list are supported
+        target_ids = [target_id] if isinstance(target_id, str) else target_id
+        for tid in target_ids:
+            if tid not in objects:
+                raise ValueError(f"insert_into: target '{tid}' not found in assembly")
+            objects[tid] = insert_into(objects[tid], objects[insert_id])
+
+    # --- Overlap detection (runs after insert_into so cuts are already applied) ---
+    # First, record every (child, parent) pair that was explicitly resolved via
+    # insert_into so we don't fire false warnings for intentional penetrations.
+    # Build a set of (child_id, parent_id) pairs that were explicitly resolved
+    # via insert_into, so we don't warn about intentional penetrations.
+    intentional_pairs = set()
+    for spec in object_specs:
+        target = spec.get("insert_into")
+        if target is None:
+            continue
+        # Normalise to list, same as the insert_into loop above
+        targets = [target] if isinstance(target, str) else target
+        for tid in targets:
+            intentional_pairs.add((spec["obj_id"], tid))
+            intentional_pairs.add((tid, spec["obj_id"]))  # add both orderings
+
+    # Then check all remaining pairs for unresolved overlaps.
+    # Note: this is O(n²) — for large assemblies a bounding-box pre-filter
+    # can be added later to skip pairs that clearly don't touch.
+    import warnings
+    solid_list = list(objects.items())
+    for i in range(len(solid_list)):
+        id_i, wp_i = solid_list[i]
+        for j in range(i + 1, len(solid_list)):
+            id_j, wp_j = solid_list[j]
+            # Skip pairs that were intentionally connected via insert_into
+            if (id_i, id_j) in intentional_pairs:
+                continue
+            try:
+                inter = wp_i.val().intersect(wp_j.val())          # type: ignore
+                if not inter.isNull() and inter.Volume() > 1e-6:
+                    warnings.warn(
+                        f"Unintentional overlap detected between '{id_i}' and '{id_j}' "
+                        f"(volume ≈ {inter.Volume():.2f} mm³). "
+                        f"Use insert_into or apply_boolean_operations to resolve.",
+                        stacklevel=2,
+                    )
+            except Exception:
+                # OCCT can throw on degenerate geometry pairs; skip silently
+                pass
+
 
     # The following is so that each component has a different color based on the hash of its name
+    # Assign a deterministic color per component based on obj_id hash,
+    # unless the spec explicitly provides a color.
     colors = {spec["obj_id"]: spec.get("color") for spec in object_specs if "obj_id" in spec}
     for obj_id, solid in objects.items():
         color_spec = colors.get(obj_id)

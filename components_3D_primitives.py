@@ -40,7 +40,7 @@ REQUIRED_PARAMS: Dict[ShapeType, set] = {
     ShapeType.SPHERE: {"radius"},
     ShapeType.WEDGE: {"dx", "dy", "dz", "xmin", "zmin", "xmax", "zmax"},
     ShapeType.CYLINDER_CLOSED_BOTTOM: {"height", "outer_radius", "wall_thickness"},
-    ShapeType.PIPE: {"height", "outer_radius", "inner_radius"},
+    ShapeType.PIPE: {"height"},  # any two of {outer_radius, inner_radius, wall_thickness} also required, checked at build time
 }
 
 
@@ -350,16 +350,66 @@ def _build_cylinder_closed_bottom(obj: Dict[str, Any], index: int) -> cq.Workpla
     return outer.cut(inner).clean()
 
 
-def _build_pipe(obj: Dict[str, Any], index: int) -> cq.Workplane:
-    """Build a hollow cylinder (pipe), open both ends."""
-    obj_id = obj.get("obj_id", f"obj_{index}")
-    h, ro, ri = obj["height"], obj["outer_radius"], obj["inner_radius"]
+# def _build_pipe(obj: Dict[str, Any], index: int) -> cq.Workplane:
+#     """Build a hollow cylinder (pipe), open both ends."""
+#     obj_id = obj.get("obj_id", f"obj_{index}")
+#     h, ro, ri = obj["height"], obj["outer_radius"], obj["inner_radius"]
 
-    if h <= 0: raise ValueError(f"Pipe height must be > 0 at index {index} (obj_id: {obj_id})")
-    if ro <= 0: raise ValueError(f"Pipe outer_radius must be > 0 at index {index} (obj_id: {obj_id})")
-    if ri <= 0 or ri >= ro: raise ValueError(f"Pipe inner_radius must be in (0, outer_radius) at index {index} (obj_id: {obj_id})")
+#     if h <= 0: raise ValueError(f"Pipe height must be > 0 at index {index} (obj_id: {obj_id})")
+#     if ro <= 0: raise ValueError(f"Pipe outer_radius must be > 0 at index {index} (obj_id: {obj_id})")
+#     if ri <= 0 or ri >= ro: raise ValueError(f"Pipe inner_radius must be in (0, outer_radius) at index {index} (obj_id: {obj_id})")
+
+#     return cq.Workplane("XY").cylinder(h, ro).cut(cq.Workplane("XY").cylinder(h, ri))
+
+
+
+def _build_pipe(obj: Dict[str, Any], index: int) -> cq.Workplane:
+    """Build a hollow cylinder (pipe), open both ends.
+    
+    Requires height + any two of: outer_radius, inner_radius, wall_thickness.
+    The third is derived automatically.
+    """
+    obj_id = obj.get("obj_id", f"obj_{index}")
+    h = obj["height"]
+
+    has_ro = "outer_radius"    in obj
+    has_ri = "inner_radius"    in obj
+    has_t  = "wall_thickness"  in obj
+
+    if sum([has_ro, has_ri, has_t]) < 2:
+        raise ValueError(
+            f"Pipe requires any two of {{outer_radius, inner_radius, wall_thickness}} "
+            f"at index {index} (obj_id: {obj_id})"
+        )
+
+    if has_ro and has_ri:
+        ro, ri = obj["outer_radius"], obj["inner_radius"]
+    elif has_ro and has_t:
+        ro = obj["outer_radius"]
+        ri = ro - obj["wall_thickness"]
+    elif has_ri and has_t:
+        ri = obj["inner_radius"]
+        ro = ri + obj["wall_thickness"]
+    else:
+        # All three given — validate consistency, prefer outer+inner
+        ro, ri = obj["outer_radius"], obj["inner_radius"]
+        t_given = obj["wall_thickness"]
+        if abs((ro - ri) - t_given) > TOLERANCE:
+            raise ValueError(
+                f"Pipe: outer_radius - inner_radius ({ro - ri}) does not match "
+                f"wall_thickness ({t_given}) at index {index} (obj_id: {obj_id})"
+            )
+
+    if h  <= 0:        raise ValueError(f"Pipe height must be > 0 at index {index} (obj_id: {obj_id})")
+    if ro <= 0:        raise ValueError(f"Pipe outer_radius must be > 0 at index {index} (obj_id: {obj_id})")
+    if ri <= 0 or ri >= ro:
+        raise ValueError(f"Pipe inner_radius must be in (0, outer_radius) at index {index} (obj_id: {obj_id})")
 
     return cq.Workplane("XY").cylinder(h, ro).cut(cq.Workplane("XY").cylinder(h, ri))
+
+
+
+
 
 
 def _build_shape(obj: Dict[str, Any], shape: ShapeType, index: int) -> cq.Workplane:
