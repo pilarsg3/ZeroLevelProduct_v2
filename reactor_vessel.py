@@ -288,7 +288,48 @@ def create_reactor_vessel(
     elif top_head_type not in (None, "flat"):
         inner = inner.union(_build_top_head(inner_d, top_head_type, top_head_params, straight_h))
 
+    # The following cut produced different objects, leading to problems in downstream operations when exporting to DAGMC
+    # vessel = outer.cut(inner).clean()
+
+    # After the boolean operations (union + cut), CadQuery/OCCT does not always
+    # produce a single topological solid. Instead, it can leave the result as a
+    # "compound" — multiple sub-shapes (e.g. cylinder + hemisphere) that are
+    # visually merged but internally still separate entities.
+    #
+    # This causes problems downstream when cad_to_dagmc processes the STEP file:
+    # it counts each sub-shape as a separate volume, so what looks like 1 component
+    # becomes 2 volumes, causing a material tag mismatch.
+    #
+    # The fix below forces OCCT to perform a true topological fusion (Fuse),
+    # which merges all sub-shapes into a single connected solid with no internal
+    # boundaries. This ensures the STEP export contains exactly 1 volume per component.
+
+    # The following doesn't work because The result is a Compound, not a Solid, so .Fuse() isn't available. 
+    # Use CadQuery's own fusion instead. Replace the fix in reactor_vessel.py with hte other code below:
+
+    # vessel = outer.cut(inner).clean()
+    # vessel = cq.Workplane().add(
+    # cq.Shape.cast(vessel.val().wrapped.Fuse(vessel.val().wrapped)) #type: ignore
+    # )
+
+
     vessel = outer.cut(inner).clean()
+
+    # Force true topological fusion into a single solid.
+    # .combine() merges all sub-shapes in the compound into one connected solid.
+    solids = vessel.solids().vals()
+    fused = solids[0]
+    for s in solids[1:]:
+        fused = fused.fuse(s)  # type: ignore
+    vessel = cq.Workplane().add(fused)
+
+
+
+
+
+
+
+
 
     # ------------------------------------------------------------------ #
     # 3.  Top plate                                                        #

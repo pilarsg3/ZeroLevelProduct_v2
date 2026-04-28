@@ -4,10 +4,20 @@ import numpy as np
 import logging
 import math
 
+
 logger = logging.getLogger(__name__)
 
 PlaneName = Literal["XY", "XZ", "YZ"]
 AxisName = Literal["X", "Y", "Z"]
+
+def export_step(shape: cq.Shape, path: str):
+    """Export a CadQuery solid to STEP."""
+    cq.exporters.export(shape, path, exportType="STEP")
+
+def export_stl(shape: cq.Shape, path: str, tolerance: float = 0.01):
+    """Export a CadQuery solid to STL."""
+    cq.exporters.export(shape, path, exportType="STL", tolerance=tolerance)
+
 
 
 
@@ -209,11 +219,6 @@ def sweep_profile(
     # 4. Sweep
     # ----------------------------------------------------------------
     return wp.sweep(path_wire, isFrenet=isFrenet, makeSolid=True)
-
-
-
-
-
 
 
 

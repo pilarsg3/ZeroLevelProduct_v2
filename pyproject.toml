@@ -28,6 +28,9 @@ dependencies = [
     "numpy==2.4.3",
     "ocp_vscode==3.1.2",
     "Shapely==2.1.2",
+    "openai>=1.0.0",
+    "numind",
+    "anthropic",
 ]
 
 [project.urls]
@@ -40,6 +43,7 @@ Issues = "https://github.com/pilarsg3/ZeroLevelLibrary_v1/issues"
 py-modules = [
     "assemble",
     "build_3D_solid",
+    "claude_pipeline",
     "components_3D_primitives",
     "components_premade",
     "ihx",

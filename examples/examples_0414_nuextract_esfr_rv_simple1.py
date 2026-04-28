@@ -1,4 +1,4 @@
-from nuextract_pipeline import specs_from_json, patch_spec
+from zzz_nuextract_pipeline import specs_from_json, patch_spec
 from assemble import assemble_objects
 from ocp_vscode import show
 
